@@ -56,6 +56,8 @@ io.on('connection', (socket) => {
   });
 });
 
+app.get("/", (req, res) => res.send("Helloo..."))
+
 server.listen(4000, () => {
   console.log('Listening on port 4000');
 });
