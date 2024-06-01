@@ -36,7 +36,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('countdown_game3', () => {
-    io.emit('countdown_game4');
+    io.emit('countdown_game3');
   });
 
   socket.on('result_game1', () => {
