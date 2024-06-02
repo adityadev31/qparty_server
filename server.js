@@ -86,12 +86,29 @@ const generateMultiple = async () => {
     await new Multiple({team1: [rf1, rm1, rm2, rm3], team2: [rf2, rm4, rm5, rm6]}).save();
     }
   } catch (err) {
-    return res.json({error: err.message})
+    console.log({error: err.message})
   }
+}
+
+const deleteAllData = async () => {
+  try {
+    await Empl.deleteMany({})
+    await Single1.deleteMany({})
+    await Single2.deleteMany({})
+    await Multiple.deleteMany({})
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+const emitTotalConnections = () => {
+  const totalConnections = io.sockets.sockets.size - 1;
+  io.emit('active_connections', { totalConnections });
 }
 
 io.on('connection', (socket) => {
   console.log('New client connected');
+  emitTotalConnections();
 
   socket.on('idle', () => {
     io.emit('idle');
@@ -135,6 +152,12 @@ io.on('connection', (socket) => {
   socket.on('result_game3', () => {
     io.emit('result_game3');
   });
+
+  socket.on('clear_data', () => {
+    console.log("clear server");
+    deleteAllData();
+    io.emit('clear_local');
+  })
 
   // ============================
 
@@ -183,6 +206,7 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     console.log('Client disconnected');
+    emitTotalConnections();
   });
 });
 

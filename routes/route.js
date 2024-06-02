@@ -31,6 +31,8 @@ router.get('/multiwin', async (req, res) => {
   const result = await Multiple.find({});
   if(result && result.length > 0) {
     return res.json(result[0])
+  } else {
+    return res.status(500);
   }
 })
 
